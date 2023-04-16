@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "your-app-name",
-    "slug": "your-app-slug",
+    "name": "LifeReboot",
+    "slug": "LifeReboot",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -27,6 +27,8 @@
     "android": {
       "package": "com.yourcompany.yourappname",
       "versionCode": 1,
+      "useNextNotificationsApi": true,
+      "googleServicesFile": null,
       "permissions": [
         "NOTIFICATIONS"
       ],
@@ -42,6 +44,10 @@
       "eas": {
         "projectId": "d7beefcb-31b6-4ce3-9d1c-74a8966dd0ac"
       }
+    },
+    "notification": {
+      "icon": "./assets/adaptive-icon.png",
+      "color": "#FFFFFF"
     }
   }
 }
