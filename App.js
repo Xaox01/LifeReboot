@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, ActivityIndicator, SafeAreaView } from 'react-native';
+import { StyleSheet, View, ActivityIndicator, SafeAreaView, ScrollView, RefreshControl } from 'react-native';
 import SobrietyCounter from './components/SobrietyCounter';
 import * as Notifications from 'expo-notifications';
 import Constants from 'expo-constants';
@@ -16,10 +16,24 @@ function HomeScreen({ navigation }) {
 }
 
 function NotificationsScreen({ navigation }) {
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = () => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 1000);
+  };
+
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text onPress={() => navigation.goBack()}>Twoje osiągniecia</Text>
-    </View>
+    <ScrollView
+      contentContainerStyle={styles.container}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+    >
+      <Text style={styles.text} onPress={() => navigation.goBack()}>Twoje osiągniecia</Text>
+    </ScrollView>
   );
 }
 
@@ -88,12 +102,19 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#222831',
-  },
-  loadingContainer: {
-    flex: 1,
+    backgroundColor: '#121212',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#222831',
   },
-});
+  loadingContainer: {
+  flex: 1,
+  alignItems: 'center',
+  justifyContent: 'center',
+  backgroundColor: '#121212',
+  },
+  text: {
+  fontSize: 20,
+  color: '#FFFFFF',
+  marginBottom: 20,
+  },
+  });
