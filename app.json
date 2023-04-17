@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "LifeReboot",
-    "slug": "LifeReboot",
+    "slug": "lifereboot",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -42,12 +42,13 @@
     },
     "extra": {
       "eas": {
-        "projectId": "d7beefcb-31b6-4ce3-9d1c-74a8966dd0ac"
+        "projectId": "e4630793-b003-4b84-ab6a-75fe4edda708"
       }
     },
     "notification": {
       "icon": "./assets/adaptive-icon.png",
       "color": "#FFFFFF"
-    }
+    },
+    "owner": "vandal1312"
   }
 }

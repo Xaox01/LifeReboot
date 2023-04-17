@@ -6,12 +6,16 @@ import {
   Button,
   ScrollView,
   RefreshControl,
+  TextInput,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Notifications from 'expo-notifications';
 
 const motivationalQuotes = [
-  // Dodaj swoje motywacyjne cytaty
+  'szatan to pała',
+  'gówno',
+  'pjes',
+  'test'
 ];
 
 const getRandomQuote = () => {
@@ -28,6 +32,9 @@ const SobrietyCounter = () => {
   const [refreshing, setRefreshing] = useState(false);
   const [buttonLabel, setButtonLabel] = useState('Start');
   const [sentNotification, setSentNotification] = useState(false);
+
+  const [reason, setReason] = useState('');
+  const [showForm, setShowForm] = useState(false);
 
   useEffect(() => {
     const getSobrietyDate = async () => {
@@ -91,7 +98,13 @@ const SobrietyCounter = () => {
       }
       setSobrietyDate(currentDate);
       setButtonLabel('Stop');
-    } else {
+      } else {
+      setShowForm(true);
+      }
+      };
+      
+      const handleFormSubmit = async () => {
+      // Tutaj można dodać kod obsługujący przesłanie powodu do bazy danych lub innego miejsca
       try {
         await AsyncStorage.removeItem('sobrietyDate');
         setSobrietyDate(null);
@@ -101,18 +114,17 @@ const SobrietyCounter = () => {
       } catch (error) {
         console.error('Error while removing sobriety date:', error);
       }
-    }
-  };
+      setShowForm(false);
+      setReason('');
+    };
 
-  async function sendNotification() {
+    async function sendNotification() {
     const permission = await Notifications.requestPermissionsAsync();
-    console.log(permission)
-  
     if (permission.status !== 'granted') {
       console.error('Permission to send notifications not granted.');
       return;
     }
-  
+    
     const identifier = await Notifications.scheduleNotificationAsync({
       content: {
         title: 'Gratulacje!',
@@ -122,10 +134,10 @@ const SobrietyCounter = () => {
         seconds: 10, // testowo ustawić na 10 sekund
       },
     });
-  
+    
     console.log('Notification scheduled:', identifier);
   }
-  
+
   return (
   <ScrollView
   contentContainerStyle={styles.container}
@@ -133,46 +145,68 @@ const SobrietyCounter = () => {
   <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
   }
   >
-  <Text style={styles.title}>Licznik Trzeźwości</Text>
   <Text style={styles.timeText}>
   {time.days} dni {time.hours} godz. {time.minutes} min. {time.seconds} sek.
   </Text>
   <Button title={buttonLabel} onPress={handleButtonClick} />
-  <View style={styles.quoteContainer}>
-    <Text style={styles.quoteText}>{quote}</Text>
+  {showForm && (
+  <View style={styles.form}>
+  <TextInput
+           style={styles.reasonInput}
+           onChangeText={setReason}
+           value={reason}
+           placeholder="Wprowadź powód"
+         />
+  <Button title="Zatwierdź" onPress={handleFormSubmit} />
   </View>
-</ScrollView>
-);
-};
-
-const styles = StyleSheet.create({
-container: {
-flexGrow: 1,
-backgroundColor: '#121212',
-alignItems: 'center',
-justifyContent: 'center',
-},
-title: {
-fontSize: 28,
-fontWeight: 'bold',
-color: '#FFFFFF',
-marginBottom: 20,
-},
-timeText: {
-fontSize: 20,
-color: '#FFFFFF',
-marginBottom: 20,
-},
-quoteContainer: {
-marginTop: 30,
-paddingHorizontal: 20,
-},
-quoteText: {
-fontSize: 18,
-fontStyle: 'italic',
-color: '#FFFFFF',
-textAlign: 'center',
-},
-});
-
-export default SobrietyCounter;
+  )}
+  <View style={styles.quoteContainer}>
+  <Text style={styles.quoteText}>{quote}</Text>
+  </View>
+  </ScrollView>
+  );
+  };
+  
+  const styles = StyleSheet.create({
+  container: {
+  flexGrow: 1,
+  backgroundColor: '#121212',
+  alignItems: 'center',
+  justifyContent: 'center',
+  },
+  title: {
+  fontSize: 28,
+  fontWeight: 'bold',
+  color: '#FFFFFF',
+  marginBottom: 20,
+  },
+  timeText: {
+  fontSize: 20,
+  color: '#FFFFFF',
+  marginBottom: 20,
+  },
+  quoteContainer: {
+  marginTop: 30,
+  paddingHorizontal: 20,
+  },
+  quoteText: {
+  fontSize: 18,
+  fontStyle: 'italic',
+  color: '#FFFFFF',
+  textAlign: 'center',
+  },
+  form: {
+  marginTop: 20,
+  width: '80%',
+  },
+  reasonInput: {
+  borderWidth: 1,
+  borderColor: '#FFFFFF',
+  borderRadius: 4,
+  color: '#FFFFFF',
+  padding: 10,
+  marginBottom: 10,
+  },
+  });
+  
+  export default SobrietyCounter;

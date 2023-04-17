@@ -18,7 +18,7 @@ function HomeScreen({ navigation }) {
 function NotificationsScreen({ navigation }) {
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text onPress={() => navigation.goBack()}>Go back home</Text>
+      <Text onPress={() => navigation.goBack()}>Twoje osiągniecia</Text>
     </View>
   );
 }
